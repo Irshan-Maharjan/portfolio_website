@@ -41,6 +41,10 @@ const Footer = () => {
                     </a>
 
                 </div>
+
+                <div className="mt-8 text-center text-gray-500 text-sm">
+                    © {new Date().getFullYear()} Irshan Maharjan. All rights reserved.
+                </div>
             </div>
         </footer>
     )
