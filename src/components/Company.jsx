@@ -18,6 +18,8 @@ const Company = () => {
 
     const [isHovering, setIsHovering] = useState(false)
 
+    const autoGlowRef = useRef(null)
+
     useEffect(() => {
         const ctx = gsap.context(() => {
             // Parallax effect for title
@@ -48,6 +50,33 @@ const Company = () => {
                     }
                 }
             )
+
+            // Automatic glow animation
+            if (autoGlowRef.current) {
+                gsap.fromTo(autoGlowRef.current,
+                    {
+                        attr: { cx: -150 }, // Start further back for larger radius
+                        opacity: 0
+                    },
+                    {
+                        attr: { cx: 1350 }, // Move past the end
+                        opacity: 1,
+                        duration: 3, // Slightly faster (was 4s)
+                        ease: "power1.inOut", // Smoother ease
+                        scrollTrigger: {
+                            trigger: sectionRef.current,
+                            start: "top 75%", // Start sooner (was 60%)
+                            toggleActions: "play none none reset"
+                        },
+                        onStart: () => {
+                            gsap.to(autoGlowRef.current, { opacity: 1, duration: 0.5 })
+                        },
+                        onComplete: () => {
+                            gsap.to(autoGlowRef.current, { opacity: 0, duration: 0.5 })
+                        }
+                    }
+                )
+            }
         }, sectionRef)
 
         return () => ctx.revert()
@@ -59,7 +88,6 @@ const Company = () => {
             if (!glowContainerRef.current) return
 
             const now = Date.now()
-            const container = glowContainerRef.current
 
             // Remove trails older than 500ms
             trailsRef.current = trailsRef.current.filter(trail => {
@@ -103,6 +131,15 @@ const Company = () => {
         const svgX = (x / rect.width) * 1200
         const svgY = (y / rect.height) * 200
 
+        // Performance optimization: Distance check
+        // Only create new trail if cursor moved enough distance (e.g., 10 units)
+        // This significantly reduces DOM node creation
+        if (trailsRef.current.length > 0) {
+            const lastTrail = trailsRef.current[trailsRef.current.length - 1]
+            const dist = Math.hypot(svgX - lastTrail.x, svgY - lastTrail.y)
+            if (dist < 15) return // Skip if movement is too small
+        }
+
         // Create a new glow circle at this position
         const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
         circle.setAttribute('cx', svgX)
@@ -111,6 +148,8 @@ const Company = () => {
         circle.setAttribute('fill', 'url(#glowGradient)')
         circle.style.filter = 'blur(20px)'
         circle.style.opacity = '1'
+        // Add will-change to hint browser for optimization
+        circle.style.willChange = 'opacity'
 
         glowContainerRef.current.appendChild(circle)
 
@@ -223,15 +262,31 @@ const Company = () => {
                                 </text>
 
                                 {/* Glow layer - masked to text shape with trail effect */}
-                                <g
-                                    ref={glowContainerRef}
-                                    mask="url(#textMask)"
-                                    style={{
-                                        opacity: isHovering ? 1 : 0,
-                                        transition: isHovering ? 'opacity 0.1s ease-in' : 'opacity 0.2s ease-out'
-                                    }}
-                                >
-                                    {/* Trail circles are dynamically added here via DOM manipulation */}
+                                <g mask="url(#textMask)">
+                                    {/* Automatic glow circle */}
+                                    <circle
+                                        ref={autoGlowRef}
+                                        cx="-150"
+                                        cy="100" // Center vertically (200/2)
+                                        r="120" // Increased radius for more glow
+                                        fill="url(#glowGradient)"
+                                        style={{
+                                            filter: 'blur(25px)', // Slightly more blur
+                                            opacity: 0,
+                                            willChange: 'transform, opacity' // Hint for GPU acceleration
+                                        }}
+                                    />
+
+                                    {/* Hover trail container */}
+                                    <g
+                                        ref={glowContainerRef}
+                                        style={{
+                                            opacity: isHovering ? 1 : 0,
+                                            transition: isHovering ? 'opacity 0.1s ease-in' : 'opacity 0.2s ease-out'
+                                        }}
+                                    >
+                                        {/* Trail circles are dynamically added here via DOM manipulation */}
+                                    </g>
                                 </g>
                             </svg>
                         </div>
