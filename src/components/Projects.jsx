@@ -134,13 +134,13 @@ const Projects = () => {
             className="relative min-h-screen bg-black text-white py-32 px-6"
         >
             {/* Header */}
-            <div ref={titleRef} className="container mx-auto mb-16">
+            <div ref={titleRef} className="container mx-auto mb-16 px-4 md:px-0">
                 <motion.h1
-                    className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter mb-6 text-[#f5f5f5]"
+                    className="text-4xl md:text-8xl lg:text-9xl font-bold tracking-tighter mb-6 text-[#f5f5f5]"
                 >
                     SELECTED WORK
                 </motion.h1>
-                <p className="text-xl md:text-2xl text-gray-400 max-w-3xl">
+                <p className="text-lg md:text-2xl text-gray-400 max-w-3xl">
                     Showcasing innovative solutions in AI/ML and web development
                 </p>
 

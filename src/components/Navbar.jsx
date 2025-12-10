@@ -163,8 +163,8 @@ const Navbar = () => {
                             <div className="text-[clamp(0.875rem,1.5vw,1.25rem)] font-bold tracking-wide text-black whitespace-nowrap">
                                 IRSHAN MAHARJAN
                             </div>
-                            {/* Scrolling Text */}
-                            <div className="w-[clamp(200px,30vw,400px)] overflow-hidden">
+                            {/* Scrolling Text - Hidden on small mobile, visible on larger screens */}
+                            <div className="w-[clamp(150px,30vw,400px)] overflow-hidden hidden sm:block">
                                 <motion.div
                                     animate={{ x: [0, -1000] }}
                                     transition={{
@@ -184,7 +184,8 @@ const Navbar = () => {
                     {/* Right: Hamburger Menu */}
                     <button
                         onClick={() => setIsOpen(!isOpen)}
-                        className="p-3 hover:bg-black/5 rounded-full transition-colors"
+                        className="p-3 hover:bg-black/5 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                        aria-label="Menu"
                     >
                         <motion.div
                             animate={{ rotate: isOpen ? 90 : 0 }}
@@ -206,7 +207,7 @@ const Navbar = () => {
                                 duration: 0.3,
                                 ease: [0.4, 0, 0.2, 1]
                             }}
-                            className="w-full px-8 pb-4"
+                            className="w-full px-6 md:px-8 pb-4"
                         >
                             <div className="space-y-2 pt-4 border-b border-black/5 mb-4">
                                 {menuItems.map((item, index) => (
@@ -215,7 +216,7 @@ const Navbar = () => {
                                             key={index}
                                             href={item.href}
                                             onClick={() => setIsOpen(false)}
-                                            className="block group"
+                                            className="block group py-1"
                                         >
                                             <motion.div
                                                 initial={{ opacity: 0, x: -20 }}
@@ -226,7 +227,7 @@ const Navbar = () => {
                                                     ease: [0.4, 0, 0.2, 1]
                                                 }}
                                                 whileHover={{ scale: 1.02, x: 10 }}
-                                                className="text-4xl md:text-5xl font-bold tracking-tighter text-black hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-cyan-600 hover:to-purple-600 transition-all duration-300 relative"
+                                                className="text-3xl md:text-5xl font-bold tracking-tighter text-black hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-cyan-600 hover:to-purple-600 transition-all duration-300 relative"
                                             >
                                                 {item.title}
                                                 <motion.div
@@ -242,7 +243,7 @@ const Navbar = () => {
                                             key={index}
                                             to={item.href}
                                             onClick={() => setIsOpen(false)}
-                                            className="block group"
+                                            className="block group py-1"
                                         >
                                             <motion.div
                                                 initial={{ opacity: 0, x: -20 }}
@@ -253,7 +254,7 @@ const Navbar = () => {
                                                     ease: [0.4, 0, 0.2, 1]
                                                 }}
                                                 whileHover={{ scale: 1.02, x: 10 }}
-                                                className="text-4xl md:text-5xl font-bold tracking-tighter text-black hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-cyan-600 hover:to-purple-600 transition-all duration-300 relative"
+                                                className="text-3xl md:text-5xl font-bold tracking-tighter text-black hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-cyan-600 hover:to-purple-600 transition-all duration-300 relative"
                                             >
                                                 {item.title}
                                                 <motion.div
@@ -271,7 +272,7 @@ const Navbar = () => {
                     )}
                 </AnimatePresence>
             </motion.nav>
-        </motion.div>
+        </motion.div >
     )
 }
 

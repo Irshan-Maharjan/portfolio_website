@@ -13,9 +13,9 @@ const GetInTouchButton = () => {
                 initial="initial"
                 whileHover="hover"
             >
-                {/* Rolling Circle */}
+                {/* Rolling Circle - Hidden on mobile/tablet */}
                 <motion.div
-                    className="absolute right-0 w-[45px] h-[45px] md:w-[55px] md:h-[55px] lg:w-[60px] lg:h-[60px] bg-[#f5f5f5] rounded-full flex items-center justify-center text-lg md:text-xl lg:text-2xl shadow-[0_4px_12px_rgba(0,0,0,0.1)]"
+                    className="absolute right-0 w-[45px] h-[45px] md:w-[55px] md:h-[55px] lg:w-[60px] lg:h-[60px] bg-[#f5f5f5] rounded-full hidden lg:flex items-center justify-center text-lg md:text-xl lg:text-2xl shadow-[0_4px_12px_rgba(0,0,0,0.1)]"
                     style={{
                         willChange: 'transform'
                     }}

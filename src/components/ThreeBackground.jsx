@@ -139,7 +139,7 @@ const FloatingDust = () => {
 
 const ThreeBackground = () => {
     return (
-        <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="fixed inset-0 z-0 pointer-events-none hidden md:block">
             <Canvas camera={{ position: [0, 0, 10], fov: 60 }} dpr={[1, 2]}>
                 <ParticleNetwork />
                 <FloatingDust />

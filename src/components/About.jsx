@@ -31,7 +31,30 @@ const About = () => {
     ]
 
     useEffect(() => {
-        const ctx = gsap.context(() => {
+        const mm = gsap.matchMedia();
+
+        mm.add("(max-width: 767px)", () => {
+            // Mobile Animation for Image Color Reveal
+            // Sliding transition from top-left to bottom-right (using circle clip-path at 0 0)
+            const imageContainer = containerRef.current.querySelector('.image-container')
+            const colorOverlay = containerRef.current.querySelector('.color-overlay')
+
+            if (imageContainer && colorOverlay) {
+                gsap.to(colorOverlay, {
+                    clipPath: 'circle(150% at 0 0)', // Expand circle from top-left to cover full image
+                    ease: "power2.inOut",
+                    scrollTrigger: {
+                        trigger: imageContainer,
+                        start: "top 60%", // Start when image is near center/fully visible
+                        end: "bottom 40%",
+                        scrub: 1, // Smooth scrub linked to scroll
+                        toggleActions: "play reverse play reverse"
+                    }
+                })
+            }
+        });
+
+        mm.add("(min-width: 768px)", () => {
             const wordElements = textRef.current.querySelectorAll('.word')
 
             // Pre-calculate random max spacing for each word to ensure consistency during scroll
@@ -117,45 +140,67 @@ const About = () => {
                     })
                 }
             })
-        }, containerRef)
+        });
 
-        return () => ctx.revert()
+        return () => mm.revert();
     }, [])
 
     return (
-        <section ref={containerRef} className="min-h-screen bg-background text-white pt-20 pb-20 px-4 flex flex-col justify-center relative">
+        <section ref={containerRef} className="min-h-screen bg-background text-white pt-20 pb-20 px-2 md:px-4 flex flex-col justify-center relative">
             <div className="w-full">
-                <span className="text-sm md:text-base text-gray-400 uppercase tracking-widest mb-12 block">Myself</span>
+                <span className="text-sm md:text-base text-gray-400 uppercase tracking-widest mb-12 block text-center lg:text-left">Myself</span>
 
-                <div className="flex flex-col lg:flex-row gap-6 items-start">
-                    {/* Image Section - Sticky only on Desktop */}
-                    {/* Changed sticky to lg:sticky and top-32 to lg:top-32 */}
+                <div className="flex flex-col lg:flex-row gap-6 items-center lg:items-start">
+                    {/* Image Section */}
                     <div className="lg:w-[35%] w-full relative lg:sticky lg:top-32 flex justify-center lg:order-2 order-1 mb-8 lg:mb-0">
-                        <div className="aspect-[3/4] w-full max-w-[280px] md:max-w-[320px] lg:max-w-[380px] xl:max-w-[420px] rounded-2xl overflow-hidden relative group grayscale hover:grayscale-0 transition-all duration-500">
+                        {/* Reduced max-width on mobile (220px) */}
+                        <div className="image-container aspect-[3/4] w-full max-w-[220px] md:max-w-[320px] lg:max-w-[380px] xl:max-w-[420px] rounded-2xl overflow-hidden relative group transition-all duration-500">
+
+                            {/* Grayscale Base Image (Always visible as base) */}
                             <img
                                 src={profileImg}
                                 alt="Irshan Maharjan"
-                                className="w-full h-full object-cover object-center"
+                                className="w-full h-full object-cover object-center grayscale"
                             />
+
+                            {/* Color Image Overlay (Revealed on mobile scroll / Desktop Hover) */}
+                            {/* On desktop: group-hover controls opacity. On mobile: GSAP controls clip-path */}
+                            {/* We use Tailwind arbitrary values for the initial clip-path state:
+                                Mobile: [clip-path:circle(0%_at_0_0)] (Hidden at top-left)
+                                Desktop: md:[clip-path:none] (Fully visible geometry, hidden by opacity)
+                             */}
+                            <div
+                                className="color-overlay absolute inset-0 w-full h-full lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-500 [clip-path:circle(0%_at_0_0)] md:[clip-path:none]"
+                            >
+                                <img
+                                    src={profileImg}
+                                    alt="Irshan Maharjan"
+                                    className="w-full h-full object-cover object-center"
+                                />
+                            </div>
+
                             {/* Overlay gradient */}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                         </div>
                     </div>
 
-                    {/* Large Text Block - Order 2 on mobile, Order 1 on Desktop */}
-                    <div className="lg:w-[65%] lg:order-1 order-2">
-                        {/* Responsive text size using clamp - Reduced leading slightly */}
-                        <div ref={textRef} className="font-bold tracking-tighter leading-[1.0]" style={{ fontSize: 'clamp(1.5rem, 3.5vw, 4rem)' }}>
+                    {/* Large Text Block */}
+                    <div className="lg:w-[65%] lg:order-1 order-2 w-full">
+
+                        {/* MOBILE VIEW: Single Paragraph for natural justification (Resolves "too much spacing" issue) */}
+                        <div className="md:hidden font-bold tracking-tighter leading-[1.1] text-justify" style={{ fontSize: 'clamp(1.5rem, 6vw, 2.5rem)' }}>
+                            {lines.map(line => line.text).join(" ")}
+                        </div>
+
+                        {/* DESKTOP VIEW: Split Lines for GSAP Animation (PRESERVED) */}
+                        <div ref={textRef} className="hidden md:block font-bold tracking-tighter leading-[1.0] text-left" style={{ fontSize: 'clamp(1.5rem, 3.5vw, 4rem)' }}>
                             {lines.map((line, lineIndex) => {
                                 const words = line.text.split(" ")
                                 return (
-                                    // Changed flex-wrap to flex-nowrap to strictly prevent wrapping
-                                    // Reduced marginBottom to 0.2em
-                                    <div key={lineIndex} className="flex flex-nowrap items-baseline" style={{ whiteSpace: 'nowrap', marginBottom: '0.2em', width: '100%', overflow: 'hidden', paddingBottom: '0.1em' }}>
+                                    <div key={lineIndex} className="flex flex-nowrap items-baseline justify-start" style={{ whiteSpace: 'nowrap', marginBottom: '0.2em', width: '100%', overflow: 'hidden', paddingBottom: '0.1em' }}>
                                         {words.map((word, wordIndex) => {
                                             const isAnchor = line.anchors.includes(wordIndex)
                                             const isLast = wordIndex === words.length - 1
-                                            // Calculate a global index for deterministic random seeding
                                             const globalIndex = lineIndex * 10 + wordIndex
                                             return (
                                                 <span

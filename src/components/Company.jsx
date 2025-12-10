@@ -21,8 +21,10 @@ const Company = () => {
     const autoGlowRef = useRef(null)
 
     useEffect(() => {
+        const mm = gsap.matchMedia();
+
         const ctx = gsap.context(() => {
-            // Parallax effect for title
+            // Parallax effect for title (Global)
             gsap.to(titleRef.current, {
                 y: -100,
                 ease: "none",
@@ -34,7 +36,7 @@ const Company = () => {
                 }
             })
 
-            // Glowing line animation
+            // Glowing line animation (Global)
             gsap.fromTo(lineRef.current,
                 { scaleX: 0, opacity: 0 },
                 {
@@ -51,35 +53,68 @@ const Company = () => {
                 }
             )
 
-            // Automatic glow animation
-            if (autoGlowRef.current) {
-                gsap.fromTo(autoGlowRef.current,
-                    {
-                        attr: { cx: -150 }, // Start further back for larger radius
-                        opacity: 0
-                    },
-                    {
-                        attr: { cx: 1350 }, // Move past the end
+            // DESKTOP: Automatic glow animation (Time-based, original)
+            mm.add("(min-width: 768px)", () => {
+                if (autoGlowRef.current) {
+                    gsap.fromTo(autoGlowRef.current,
+                        {
+                            attr: { cx: -150 }, // Start further back
+                            opacity: 0
+                        },
+                        {
+                            attr: { cx: 1350 }, // Move past the end
+                            opacity: 1,
+                            duration: 3,
+                            ease: "power1.inOut",
+                            repeat: -1, // Loop on desktop? Original code didn't loop infinitely but used onComplete? 
+                            // Original code had scrollTrigger toggleActions "play none none reset", so it plays once per view cycle.
+                            // Let's stick to original behavior: One pass when scrolled in.
+                            scrollTrigger: {
+                                trigger: sectionRef.current,
+                                start: "top 75%",
+                                toggleActions: "play none none reset" // Reset lets it play again when re-entering
+                            },
+                            onStart: () => {
+                                gsap.to(autoGlowRef.current, { opacity: 1, duration: 0.5 })
+                            },
+                            onComplete: () => {
+                                gsap.to(autoGlowRef.current, { opacity: 0, duration: 0.5 })
+                            }
+                        }
+                    )
+                }
+            });
+
+            // MOBILE: Interactive Scroll Glow (Scrub-based)
+            mm.add("(max-width: 767px)", () => {
+                if (autoGlowRef.current) {
+                    // Reset position/opacity AND increase radius for mobile execution
+                    // Reverts automatically when matchMedia context is cleared (desktop)
+                    gsap.set(autoGlowRef.current, {
                         opacity: 1,
-                        duration: 3, // Slightly faster (was 4s)
-                        ease: "power1.inOut", // Smoother ease
+                        attr: { cx: -150, r: 200 } // Increased radius (from 120) to cover more space
+                    })
+
+                    gsap.to(autoGlowRef.current, {
+                        attr: { cx: 1350 }, // Sweep across text
+                        ease: "none", // Linear scrub
+                        repeat: 4, // Repeat 4 more times (5 total passes during scroll)
                         scrollTrigger: {
                             trigger: sectionRef.current,
-                            start: "top 75%", // Start sooner (was 60%)
-                            toggleActions: "play none none reset"
-                        },
-                        onStart: () => {
-                            gsap.to(autoGlowRef.current, { opacity: 1, duration: 0.5 })
-                        },
-                        onComplete: () => {
-                            gsap.to(autoGlowRef.current, { opacity: 0, duration: 0.5 })
+                            start: "top bottom", // Start when section enters
+                            end: "bottom top", // End when section leaves
+                            scrub: 1 // Smooth scrubbing
                         }
-                    }
-                )
-            }
+                    })
+                }
+            });
+
         }, sectionRef)
 
-        return () => ctx.revert()
+        return () => {
+            ctx.revert();
+            mm.revert();
+        }
     }, [])
 
     // Cleanup old trails every frame
@@ -130,6 +165,9 @@ const Company = () => {
         // Convert to SVG coordinates (viewBox is 1200x200)
         const svgX = (x / rect.width) * 1200
         const svgY = (y / rect.height) * 200
+
+        // Check if mobile device (width < 768px)
+        if (window.innerWidth < 768) return
 
         // Performance optimization: Distance check
         // Only create new trail if cursor moved enough distance (e.g., 10 units)
@@ -188,7 +226,7 @@ const Company = () => {
     }, [])
 
     return (
-        <section ref={sectionRef} className="min-h-[80vh] flex flex-col justify-center py-20 px-6 bg-background relative overflow-hidden">
+        <section ref={sectionRef} className="min-h-[80vh] flex flex-col justify-center py-10 md:py-20 px-2 md:px-6 bg-background relative overflow-hidden">
 
             {/* Background Elements */}
             <div className="absolute inset-0 pointer-events-none">
@@ -197,8 +235,9 @@ const Company = () => {
             </div>
 
             <div className="container mx-auto text-center relative z-10">
-                <div ref={titleRef} className="mb-12">
-                    <h2 className="text-[11vw] font-bold tracking-tighter leading-none bg-clip-text text-transparent bg-gradient-to-b from-white to-white/10">
+                <div ref={titleRef} className="mb-6 md:mb-12">
+                    {/* Increased size on mobile (15vw), maintained desktop (11vw) */}
+                    <h2 className="text-[15vw] md:text-[11vw] font-bold tracking-tighter leading-none bg-clip-text text-transparent bg-gradient-to-b from-white to-white/10">
                         SILICORE
                     </h2>
                     <div className="flex justify-center overflow-visible">
@@ -213,7 +252,7 @@ const Company = () => {
                             <svg
                                 viewBox="0 0 1200 200"
                                 className="w-full h-auto"
-                                style={{ overflow: 'visible' }}
+                                style={{ overflow: 'visible', '--tech-size': '180px' }}
                             >
                                 <defs>
                                     {/* Define the text as a mask */}
@@ -223,9 +262,9 @@ const Company = () => {
                                             y="50%"
                                             textAnchor="middle"
                                             dominantBaseline="middle"
-                                            className="font-bold tracking-tighter"
+                                            className="font-black md:font-bold tracking-tighter md:text-[150px]"
                                             style={{
-                                                fontSize: '150px',
+                                                fontSize: 'var(--tech-size)',
                                                 fill: 'white',
                                                 fontFamily: 'inherit'
                                             }}
@@ -248,9 +287,9 @@ const Company = () => {
                                     y="50%"
                                     textAnchor="middle"
                                     dominantBaseline="middle"
-                                    className="font-bold tracking-tighter"
+                                    className="font-black md:font-bold tracking-tighter md:text-[150px]"
                                     style={{
-                                        fontSize: '150px',
+                                        fontSize: 'var(--tech-size)',
                                         fill: 'transparent',
                                         stroke: 'rgba(255, 255, 255, 0.3)',
                                         strokeWidth: '1px',

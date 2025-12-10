@@ -1,5 +1,6 @@
 import Hero from '../components/Hero'
 import About from '../components/About'
+import Services from '../components/Services'
 import Company from '../components/Company'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
@@ -37,6 +38,7 @@ const Home = () => {
             <Hero />
             <About />
             <Company />
+            <Services />
 
             {/* Featured Projects Preview */}
             <section className="relative min-h-screen bg-black text-white py-32 px-6">
