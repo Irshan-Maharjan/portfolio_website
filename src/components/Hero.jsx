@@ -46,7 +46,10 @@ const Hero = () => {
             <div className="relative z-10 w-full md:w-[70%] ml-0 md:ml-[2.5%] pt-6 md:pt-10 pb-4 px-6 md:px-0 flex justify-between items-start text-gray-400 text-xs md:text-sm font-light tracking-wide">
                 <div className="flex flex-col md:hidden gap-0">
                     <span className="text-gray-400 text-[10px]">Building at</span>
-                    <span className="text-white font-medium">Silicore Technology</span>
+                    <a href="https://silicore.com.np" target="_blank" rel="noopener noreferrer" className="text-white font-medium relative overflow-hidden group inline-block">
+                        <span className="block transition-transform duration-300 ease-in-out group-hover:-translate-y-full">Silicore Technology</span>
+                        <span className="absolute top-full left-0 block transition-transform duration-300 ease-in-out group-hover:-translate-y-full text-white">Silicore Technology</span>
+                    </a>
                 </div>
                 <div className="hidden md:flex flex-col">
                     <span className="text-white font-medium mb-1">Nepal Based</span>
@@ -54,7 +57,10 @@ const Hero = () => {
                 </div>
                 <div className="hidden md:flex flex-col text-center">
                     <span className="text-white font-medium mb-1">Building at</span>
-                    <span>Silicore Technology</span>
+                    <a href="https://silicore.com.np" target="_blank" rel="noopener noreferrer" className="relative overflow-hidden group inline-block">
+                        <span className="block transition-transform duration-300 ease-in-out group-hover:-translate-y-full">Silicore Technology</span>
+                        <span className="absolute top-full left-0 block transition-transform duration-300 ease-in-out group-hover:-translate-y-full text-white">Silicore Technology</span>
+                    </a>
                 </div>
                 {/* Hidden on mobile, as GetInTouch button takes precedence */}
                 <div className="hidden md:flex flex-col text-right md:text-right">

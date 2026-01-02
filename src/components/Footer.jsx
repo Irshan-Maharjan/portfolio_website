@@ -31,15 +31,15 @@ const Footer = () => {
                         <span className="text-lg md:text-xl font-medium text-gray-400 group-hover:text-white transition-colors">Contact</span>
                     </a>
 
-                    <a href="https://github.com/irshanmaharjan" target="_blank" rel="noopener noreferrer" className="col-span-6 md:col-span-3 h-[16vh] md:h-auto bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6 flex flex-col justify-end transition-all duration-300 hover:backdrop-blur-xl hover:bg-white/10 hover:border-white/20 group">
+                    <a href="https://github.com/Irshan-Maharjan" target="_blank" rel="noopener noreferrer" className="col-span-6 md:col-span-3 h-[16vh] md:h-auto bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6 flex flex-col justify-end transition-all duration-300 hover:backdrop-blur-xl hover:bg-white/10 hover:border-white/20 group">
                         <span className="text-lg md:text-xl font-medium text-gray-400 group-hover:text-white transition-colors">Github</span>
                     </a>
 
-                    <a href="https://instagram.com/irshanmaharjan" target="_blank" rel="noopener noreferrer" className="col-span-6 md:col-span-3 h-[16vh] md:h-auto bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6 flex flex-col justify-end transition-all duration-300 hover:backdrop-blur-xl hover:bg-white/10 hover:border-white/20 group">
+                    <a href="https://www.instagram.com/_irshannm/" target="_blank" rel="noopener noreferrer" className="col-span-6 md:col-span-3 h-[16vh] md:h-auto bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6 flex flex-col justify-end transition-all duration-300 hover:backdrop-blur-xl hover:bg-white/10 hover:border-white/20 group">
                         <span className="text-lg md:text-xl font-medium text-gray-400 group-hover:text-white transition-colors">Instagram</span>
                     </a>
 
-                    <a href="https://linkedin.com/in/irshanmaharjan" target="_blank" rel="noopener noreferrer" className="col-span-6 md:col-span-3 h-[16vh] md:h-auto bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6 flex flex-col justify-end transition-all duration-300 hover:backdrop-blur-xl hover:bg-white/10 hover:border-white/20 group">
+                    <a href="https://www.linkedin.com/in/irshan-maharjan-14a657258/" target="_blank" rel="noopener noreferrer" className="col-span-6 md:col-span-3 h-[16vh] md:h-auto bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6 flex flex-col justify-end transition-all duration-300 hover:backdrop-blur-xl hover:bg-white/10 hover:border-white/20 group">
                         <span className="text-lg md:text-xl font-medium text-gray-400 group-hover:text-white transition-colors">LinkedIn</span>
                     </a>
 

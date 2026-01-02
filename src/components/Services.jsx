@@ -5,6 +5,13 @@ import { motion } from 'framer-motion'
 import { FaPython, FaReact, FaNodeJs, FaFigma } from 'react-icons/fa'
 import { SiNextdotjs, SiTensorflow, SiLangchain, SiGreensock, SiThreedotjs, SiTailwindcss, SiVercel } from 'react-icons/si'
 
+// Import Service Images
+import WebDevImg from '../assets/website_services.png'
+import AIMLImg from '../assets/AIML_services.png'
+import StrategyImg from '../assets/strategy_services.png'
+import PerfImg from '../assets/performance_services.png'
+import AutoImg from '../assets/automation_services.png'
+
 gsap.registerPlugin(ScrollTrigger)
 
 const Services = () => {
@@ -18,35 +25,35 @@ const Services = () => {
             title: "Web Development",
             description: "Building scalable, high-performance web applications with modern frameworks and best practices.",
             tags: ["React", "Next.js", "Tailwind", "Node.js"],
-            image: "https://placehold.co/600x400/1a1a1a/ffffff?text=Web+Dev"
+            image: WebDevImg
         },
         {
             id: "02",
             title: "AI & Machine Learning",
             description: "Developing intelligent solutions using NLP, computer vision, and predictive analytics to automate and enhance business processes.",
             tags: ["TensorFlow", "PyTorch", "NLP", "Computer Vision"],
-            image: "https://placehold.co/600x400/1a1a1a/ffffff?text=AI+ML"
+            image: AIMLImg
         },
         {
             id: "03",
             title: "Technical Strategy",
             description: "Architecting robust digital solutions aligned with business goals and future scalability.",
             tags: ["System Design", "Cloud Architecture", "Scalability", "Security"],
-            image: "https://placehold.co/600x400/1a1a1a/ffffff?text=Strategy"
+            image: StrategyImg
         },
         {
             id: "04",
             title: "Performance Optimization",
             description: "Enhancing website speed, accessibility, and SEO to ensure maximum reach and efficiency.",
             tags: ["SEO", "Core Web Vitals", "Accessibility", "Speed"],
-            image: "https://placehold.co/600x400/1a1a1a/ffffff?text=Performance"
+            image: PerfImg
         },
         {
             id: "05",
             title: "AI Marketing & Automation",
             description: "Leveraging AI to optimize marketing campaigns, automate workflows, and drive data-driven growth.",
             tags: ["Marketing Auto", "CRM", "Data Analytics", "Growth Hacking"],
-            image: "https://placehold.co/600x400/1a1a1a/ffffff?text=AI+Marketing"
+            image: AutoImg
         }
     ]
 
@@ -260,7 +267,10 @@ const Services = () => {
 
                                 {/* Image Holder */}
                                 <div className="w-full lg:w-1/4 h-48 lg:h-40 rounded-2xl overflow-hidden bg-gray-100 relative group-hover:scale-105 transition-transform duration-500">
-                                    <img
+                                    <motion.img
+                                        initial={{ scale: 1.1, opacity: 0.9 }}
+                                        whileInView={{ scale: 1, opacity: 1 }}
+                                        transition={{ duration: 1.5, ease: "easeOut" }}
                                         src={service.image}
                                         alt={service.title}
                                         className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
